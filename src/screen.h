@@ -10,8 +10,7 @@ class Screen {
 	public:
 	Screen(){
 		SDL_Init(SDL_INIT_VIDEO);
-		SDL_CreateWindowAndRenderer(640 * 2, 480 * 2, 0, &window, &renderer);
-		SDL_RenderSetScale(renderer, 2, 2);
+		SDL_CreateWindowAndRenderer(1920, 1080, 0, &window, &renderer);
 	}
 
 	void pixel(float x, float y) {
