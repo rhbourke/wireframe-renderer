@@ -1,3 +1,6 @@
+#ifndef SCREEN_H
+#define SCREEN_H
+
 #include <SDL.h>
 #include <vector>
 
@@ -8,9 +11,9 @@ class Screen {
 	std::vector<SDL_FPoint> points;
 
 	public:
-	Screen(){
+	Screen(int width, int height){
 		SDL_Init(SDL_INIT_VIDEO);
-		SDL_CreateWindowAndRenderer(1920, 1080, 0, &window, &renderer);
+		SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
 	}
 
 	void pixel(float x, float y) {
@@ -48,3 +51,4 @@ class Screen {
 
 
 };
+#endif
