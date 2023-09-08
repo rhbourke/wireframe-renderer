@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include "frame.h"
-#include <SDL.h>
+#include "SDL2/include/SDL.h"
 #include "letters.h"
 
 void add_pixels_in_line(Screen& screen, float x1, float y1, float x2, float y2) {
@@ -30,7 +30,7 @@ float delay_scale(float xR, float yR, float zR) {
 	float xFact = abs(.5-(xR - (long)xR));
 	float yFact = abs(.5-(yR - (long)yR));
 	float zFact = abs(.5-(zR - (long)zR));
-	float scale = xFact + yFact + zFact;
+	float scale = xFact * yFact * zFact;
 	return scale;
 }
 
@@ -38,28 +38,45 @@ int main(int argc, char** argv) {
 
 	int width = 1920;
 	int height = 1080;
-	Screen screen(width, height);
+	float renderScale = 1.0f;
+
+	std::cout << "Enter text to display: ";
+	std::string message;
+	std::getline(std::cin, message);
+	for (auto& c : message) c = toupper(c);
+	
+	//Working on a menu system
+	//std::cout << "Skip options? (Y/N)";
+	//char choice;
+	//std::cin >> choice;
+	//choice = toupper(choice);
+	//if (choice == 'N') {
+	//	std::cout << "\nEnter width: ";
+	//	std::getline(std::cin, message);
+	//	height = ;
+	//	renderScale = ;
+	//}
+
+	Screen screen(width, height, renderScale);
 	Frame wireframe;
 
-	std::string message = "BAAABAA";
+	
+	
 	wireframe.add_text(message);
 
-	wireframe.update_center(width, height);
+	wireframe.update_center(width, height, renderScale);
 
 	//Amount to rotate by each time we draw (radians)
-	float xRotationFactor = 0.03f; 
-	float yRotationFactor = 0.03f;
-	float zRotationFactor = 0.02f;
-	/*float xRotationFactor = 0.00f;
-	float yRotationFactor = 0.00f;
-	float zRotationFactor = 0.00f;*/
+	float xRotationFactor = 0.02f; 
+	float yRotationFactor = 0.01f;
+	float zRotationFactor = 0.01f;
 
 	//Initial rotation amount
 	float xRotationValue = 0; 
 	float yRotationValue = 0;
 	float zRotationValue = 0;
 
-	float delay = 7;
+	float delay = 100;
 	while (true) {
 		
 		std::vector<point> newPoints = wireframe.generate_rotated_frame(xRotationValue, yRotationValue, zRotationValue);

@@ -1,7 +1,6 @@
 #ifndef SCREEN_H
 #define SCREEN_H
-
-#include <SDL.h>
+#include "SDL2/include/SDL.h"
 #include <vector>
 
 class Screen {
@@ -11,44 +10,23 @@ class Screen {
 	std::vector<SDL_FPoint> points;
 
 	public:
-	Screen(int width, int height){
-		SDL_Init(SDL_INIT_VIDEO);
-		SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
-	}
 
-	void pixel(float x, float y) {
-		SDL_FPoint* point = new SDL_FPoint();
-		point->x = x;
-		point->y = y;
-		points.push_back(*point);
-	}
+		
+	Screen(int width, int height, float renderScale);
 
-	void show() {
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderClear(renderer);
+	/*Adds a point to the screen's collection of points */
+	void pixel(float x, float y);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		for (auto& point : points) {
-			SDL_RenderDrawPointF(renderer, point.x, point.y);
-		}
+	/*Colors the whole screen black, then draws all of the points in white*/
+	void show();
 
-		SDL_RenderPresent(renderer);
-	}
+	/*Wipes all of the points in the screen's collection of points*/
+	void clear();
 
-	void clear() {
-		points.clear();
-	}
-
-	void input() {
-		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) {
-				SDL_Quit();
-				exit(0);
-			}
-		}
-	}
+	void input();
 
 
 
 };
+
 #endif
