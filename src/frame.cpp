@@ -57,7 +57,8 @@ void Frame::add_text(std::string text) {
 	}
 }
 
-void Frame::update_center(int width, int height, float renderScale) {
+void Frame::update_center(int width, int height, int renderScalePercent) {
+	float renderScale = renderScalePercent * 0.01;
 	center = { 0, 0, 0 };
 	for (auto& p : points) {
 		center.x += p.x;

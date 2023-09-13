@@ -28,7 +28,7 @@ public:
 	void add_text(std::string text);
 
 	// Shifts the wireframe to the center of the screen and updates the center of rotation
-	void update_center(int width, int height, float renderScale);
+	void update_center(int width, int height, int renderScalePercent);
 
 	std::vector<edge> get_edges();
 
