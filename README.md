@@ -1,5 +1,6 @@
 # Wireframe Text Renderer
-![exampleGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/d3d1726c-255d-4cb6-9196-bbac37de02f8)
+![exampleGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/534af99f-042e-4ece-a3ea-5de912105e70)
+
 
 ## About
 
@@ -22,7 +23,7 @@ The application will open a console menu where you can input some options: what 
 
 I want to share some resources I liked about rendering in case you are also curious about it and help give you a head start in digesting how this stuff works.
 
-The core of the mathematical problem we are dealing with is figuring out how to take a point in 3D space and find out where it is in 2D space (your screen) after rotating it around some other point.
+The main mathematical problem we are dealing with is figuring out how to take a point in 3D space and find out where it is in 2D space (your screen) after rotating it around some other point.
 
 In my honest opinion, the best way to understand the math needed for stuff like this at a deep level is to go down the Wikipedia rabbit hole. [This Wikipedia page](https://en.wikipedia.org/wiki/Rotation_matrix) is a good one to dive in at (everything past the first few sections is irrelevant though). 
 
@@ -32,7 +33,8 @@ Ultimately, all we really need to be able to do for this project is find the pos
 
 Suppose we have a point, p<sub>2</sub>, rotating counterclockwise around the origin (p<sub>1</sub>). It's distance from the origin as it rotates is constant. Let us call it $\ell$ and also say the angle of rotation is $\theta$. Then we can find p<sub>2</sub> with some trig:
 
-![IMG-0805](https://github.com/rhbourke/wireframe-renderer/assets/3631484/d6920ed9-196c-4a2d-b0f9-ca9ab0d8aba4)
+![IMG-0805](https://github.com/rhbourke/wireframe-renderer/assets/3631484/5584c375-a714-4ba1-bbe9-811a0e86d9eb)
+
 
 It really doesn't actually get much more complicated than this. We can always define our origin as the center of rotation, so we will always have one point that hasn't moved. We just perform calculations like this for each vertex and connect them up later. Even in three dimensions, it is conceptually about the same. I recommend breaking out a whiteboard or using scratch paper and working things out in 2D if you run into problems. The Wikipedia page above about rotation matrices just provides a way to streamline those calculations. You might be able to see how the 2D rotation matrix is derived just from the whiteboard example.
 
