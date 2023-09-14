@@ -9,7 +9,7 @@ void Frame::add_points(std::vector<point> newPoints) {
 }
 void Frame::add_edges(std::vector<piece> newPieces) {
 	std::vector<edge> newEdges;
-	for (auto& piece : newPieces) { //convert pieces into vector of edges
+	for (auto& piece : newPieces) { // convert pieces into vector of edges
 		for (int i = piece.first; i < piece.last; i++) {
 			edge newEdge = { i, i + 1 };
 			newEdges.push_back(newEdge);
@@ -17,17 +17,17 @@ void Frame::add_edges(std::vector<piece> newPieces) {
 		edge newEdge = { piece.last, piece.first };
 		newEdges.push_back(newEdge);
 	}
-	for (auto e : newEdges) { //add regular edges
+	for (auto e : newEdges) { // add edges on front part of character
 		e.a += points.size();
 		e.b += points.size();
 		edges.push_back(e);
 	}
-	for (auto e : newEdges) { //add edges on back part of character
+	for (auto e : newEdges) { // add edges on back part of character
 		e.a += points.size() + newEdges.size();
 		e.b += points.size() + newEdges.size();
 		edges.push_back(e);
 	}
-	for (int i = 0; i < newEdges.size(); i++) { //add edges to connect front and back part of character
+	for (int i = 0; i < newEdges.size(); i++) { // add edges to connect front and back parts of character
 		edge depthEdge = { i, i + newEdges.size() };
 		depthEdge.a += points.size();
 		depthEdge.b += points.size();
@@ -36,13 +36,18 @@ void Frame::add_edges(std::vector<piece> newPieces) {
 
 }
 
+// Iterates through 'text' string and tries to add each to the wireframe
 void Frame::add_text(std::string text) {
 	for (int i = 0; i < text.size(); i++) {
 		for (auto& letter : alphabet) {
 			if (text[i] == letter.name) {
-				std::vector<point> newPoints = letter.points;
+				std::vector<point> newPoints;
 				for (auto& p : letter.points) {
-					point depthPoint = { p.x, p.y, p.z + 20 };
+					point frontPoint = { p.x, p.y, 0 };
+					newPoints.push_back(frontPoint);
+				}
+				for (auto& p : letter.points) {
+					point depthPoint = { p.x, p.y, letterDepth};
 					newPoints.push_back(depthPoint);
 				}
 				add_edges(letter.pieces);
@@ -80,6 +85,7 @@ std::vector<edge> Frame::get_edges() {
 	return edges;
 }
 
+// Rotate the frame's collection of points in 3 dimensions, parameters in radians
 std::vector<point> Frame::generate_rotated_frame(float rX, float rY, float rZ) {
 
 	std::vector<point> newFrame = points;

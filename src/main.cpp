@@ -56,6 +56,7 @@ int main(int argc, char** argv) {
 	float delay = 100;
 	std::string message;
 	std::string skipAdvancedOptions;
+	int letterDepth = 20;
 
 	// Amount to rotate by each time we draw (hundreths of radians)
 	int xRotationFactor = 2;
@@ -100,6 +101,8 @@ int main(int argc, char** argv) {
 		get_option_choice("\nR: ", drawColor.r);
 		get_option_choice("\nG: ", drawColor.g);
 		get_option_choice("\nB: ", drawColor.b);
+		std::cout << "\nEnter a value to represent the depth of the letters. Smaller => thinner, larger => wider. Default is 20.";
+		get_option_choice("\nLetter depth: ", letterDepth);
 		std::cout << "\nConfiguration complete";
 
 	}
@@ -107,6 +110,7 @@ int main(int argc, char** argv) {
 
 	Screen screen(width, height, renderScalePercent, backgroundColor, drawColor);
 	Frame wireframe;
+	wireframe.letterDepth = letterDepth;
 	
 	wireframe.add_text(message);
 	wireframe.update_center(width, height, renderScalePercent);

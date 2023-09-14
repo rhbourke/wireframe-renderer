@@ -6,12 +6,17 @@
 #include "letters.h"
 #include <string>
 
+struct point {
+	int x, y, z;
+};
 struct edge {
 	int a, b;
 };
 
 class Frame {
 	
+	
+
 	std::vector<point> points{};
 
 	std::vector<edge> edges{};
@@ -23,6 +28,8 @@ class Frame {
 	void add_edges(std::vector<piece> newPieces);
 
 public:
+
+	int letterDepth;
 
 	// Takes an input string and breaks it down into points and edges, adding them to the wireframe
 	void add_text(std::string text);
