@@ -128,6 +128,7 @@ For my purposes, I am really happy with this where it is, except that I have not
 If I were to do this all again, I would normalize the sizes. That would make scaling them easier without cheating by changing the SDL render scale (which doesn't quite work as well as I want anyway), and would make working with the program easier in general.
 
 
-![nameGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/5b9d547e-e940-487d-9542-77a4e7be5735)
+
+![nameGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/b8045582-192f-4f72-96a5-14a59e76d36f)
 
 
