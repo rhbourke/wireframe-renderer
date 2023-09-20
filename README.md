@@ -1,12 +1,13 @@
 # Wireframe Text Renderer
-![exampleGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/534af99f-042e-4ece-a3ea-5de912105e70)
+
+![trimmedExampleGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/6323e92c-f6e7-4641-9da8-77c23dd323be)
 
 
 ## About
 
 A C++ program that can take any short English text prompt and render it as a spinning 3D wireframe. I wrote this program at a low level to learn about rendering. It uses nothing but SDL 2.0 to interface with the screen and C++ code!
 
-## Usage Instructions
+## Usage
 
 You will need to compile the application. If you have Visual Studio, it should be as simple as opening the solution and building it. Then run the .exe either from VS or by finding it in the build/configuration/platform/ directory.
 
@@ -14,10 +15,14 @@ The application will open a console menu where you can input some options: what 
 
 **You can skip the advanced options** and use default values by entering "Y" when prompted, and **this is recommended your first time using the application**.
 
-*Getting **weird/ugly** output? Make sure you didn't*:
+*Getting **weird/ugly** output? Make sure you didn't:*
 * Set a render size that is too extreme - you will almost always want to use a value between 0.5 and 2 or so.
 * Choose a prompt that is too long to fit.
 * Choose a background color that is the same or very nearly the same as the draw color.
+
+*Feel free to use this project to make renderings for your personal use however you like!* 
+
+*You may also build off of this code if you'd like, just please link to this repository!*
 
 ## Understanding the Math
 
@@ -36,7 +41,7 @@ Suppose we have a point, p<sub>2</sub>, rotating counterclockwise around the ori
 ![IMG-0805](https://github.com/rhbourke/wireframe-renderer/assets/3631484/5584c375-a714-4ba1-bbe9-811a0e86d9eb)
 
 
-It really doesn't actually get much more complicated than this. We can always define our origin as the center of rotation, so we will always have one point that hasn't moved. We just perform calculations like this for each vertex and connect them up later. Even in three dimensions, it is conceptually about the same. I recommend breaking out a whiteboard or using scratch paper and working things out in 2D if you run into problems. The Wikipedia page above about rotation matrices just provides a way to streamline those calculations. You might be able to see how the 2D rotation matrix is derived just from the whiteboard example.
+It really doesn't actually get much more complicated than this. We can always define our origin as the center of rotation, so we will always have one point that hasn't moved. We just perform calculations like this for each vertex and connect them up later. Even in three dimensions, it is conceptually about the same even though it can get much harder to follow. I recommend breaking out a whiteboard or using scratch paper and working things out in 2D if you run into problems. The Wikipedia page above about rotation matrices just provides a way to streamline those calculations. You might be able to see how the 2D rotation matrix is derived just from the whiteboard example.
 
 For further reading, I really like [this page](https://bvisness.me/desmos/) which details at a high level the process of making a more sophisticated 3D renderer in Desmos, the online graphing calculator.
 
@@ -80,7 +85,7 @@ std::vector<point> Frame::generate_rotated_frame(float rX, float rY, float rZ) {
 
 The program uses SDL 2.0 in order to open a window and actually output the points that I tell it to onto the screen. Setting up SDL can be a little tricky. [Here is a resource I found helpful](https://www.studyplan.dev/sdl-dev/sdl-setup-windows), though I don't necessarily condone setting up your environment exactly as it describes if you want to distribute your application. I also found [this Stack Overflow answer](https://stackoverflow.com/a/64396980) helpful for understanding some issues I ran into.
 
-If you want to follow along with someone making the basics of a 3D renderer in SDL in video form, I didn't find any perfect options, but I like [this video](https://www.youtube.com/watch?v=kdRJgYO1BJM) which teaches you how to make a spinning cube. I would definitely start with a cube, and I *do* like this person's video and found it helpful to get me started. He is articulate and easy to follow. However, there are some things you should watch out for:
+If you want to follow along with someone making the basics of a 3D renderer in SDL in video form, I like [this video](https://www.youtube.com/watch?v=kdRJgYO1BJM) which teaches you how to make a spinning cube. I would definitely start with a cube, and I *do* like this video. He is articulate and easy to follow. However, there are some things you should watch out for:
 
 1. In his function that rotates the points, he reuses values that he already changed for previous axes. For example, when he rotates the cube in the X direction, it changes the Y values as it should. However, when he rotates in the Z direction, he is accidentally factoring in this already changed Y value instead of the original. This causes a slight warping of the cube at low rotation speeds (even visible in the video slightly, to my eye) and a very severe warping at high speeds.
 1. A floating point error will accumulate over time in his code as the points get rotated around and around, which caused my cube to shrink until it vanishes over time. Again, this is very minor at low speeds, almost unnoticeable, but becomes apparent at high speeds. To fix this, don't rotate the points in place. Instead, keep track of the original positions and make rotated copies of them.
@@ -88,11 +93,13 @@ If you want to follow along with someone making the basics of a 3D renderer in S
 
 Again, despite these warnings, I do recommend the video if you just want to get the ball rolling (cube spinning?) fast, and I am grateful to the author for getting me started.
 
+If videos aren't your style, I am hopeful that the code here is approachable enough that you can take a peak and learn that way. I am happy to field any questions you have about how this project works, and I have lots of thoughts to share with anyone that wants to learn about rendering. Feel free to contact me.
 
 ## Future Improvements and Ideas
 
 If you wanted to iterate on this project and make it your own, I have some ideas for you:
-1. Add proper perspective (more distant lines are smaller)
+1. Use quaternions and fix the [gimbal lock](https://en.wikipedia.org/wiki/Gimbal_lock)
+1. Add proper perspective (distant lines are smaller)
 1. Add an option to change the camera's location
 1. Fill in the faces of the figures
 1. Make an editor for defining the shapes/characters
@@ -101,6 +108,7 @@ These steps would all bring the project closer to being a full-fledged renderer 
 
 If I were to do this all again, I would normalize the sizes. That would make scaling them easier without cheating by changing the SDL render scale (which doesn't quite work as well as I want anyway), and would make working with the program easier in general.
 
-![nameGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/b8045582-192f-4f72-96a5-14a59e76d36f)
+![trimmedNameGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/802f79f6-ca13-4c32-88f2-b5f0f258e87f)
+
 
 
