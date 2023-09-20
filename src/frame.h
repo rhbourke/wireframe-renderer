@@ -27,15 +27,21 @@ class Frame {
 
 	void add_edges(std::vector<piece> newPieces);
 
+	int letterWidth = 100;
+	int letterHeight = 100;
+	int letterSpacing = 15;
+
+	// Shifts the wireframe to the center of the screen and updates the center of rotation
+	void update_center(int width, int height, int renderScalePercent, int messageLength);
+
 public:
 
 	int letterDepth;
 
-	// Takes an input string and breaks it down into points and edges, adding them to the wireframe
-	void add_text(std::string text);
+	// Takes an input string and breaks it down into points and edges, adding them to the wireframe, then updates the center
+	void add_text(int width, int height, int renderScalePercent, std::string text);
 
-	// Shifts the wireframe to the center of the screen and updates the center of rotation
-	void update_center(int width, int height, int renderScalePercent);
+	
 
 	std::vector<edge> get_edges();
 

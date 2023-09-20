@@ -36,23 +36,48 @@ void Frame::add_edges(std::vector<piece> newPieces) {
 
 }
 
-// Iterates through 'text' string and tries to add each to the wireframe
-void Frame::add_text(std::string text) {
-	for (int i = 0; i < text.size(); i++) {
-		for (auto& letter : alphabet) {
+std::vector<edge> Frame::get_edges() {
+	return edges;
+}
+
+void Frame::update_center(int width, int height, int renderScalePercent, int messageLength) {
+
+	float renderScale = renderScalePercent * 0.01;
+
+	// Calculating the center of the figure we want to render:
+	center = { 0, 0, 0 };
+	center.x = ((letterWidth * messageLength) + (letterSpacing * (messageLength - 1))) / 2;
+	center.y = letterHeight / 2;
+	center.z = letterDepth / 2;
+
+	// Update all of the points so they appear in the center of the screen
+	for (auto& p : points) {
+		p.x += ((width / 2) - center.x * renderScale) * (1 / renderScale);
+		p.y += ((height / 2) - center.y * renderScale) * (1 / renderScale);
+	}
+
+	// We just moved all of the points so that the text is in the center of the screen. Now update the actual center so it is accurate again.
+	center.x = width / (2 * renderScale);
+	center.y = height / (2 * renderScale);
+}
+
+void Frame::add_text(int width, int height, int renderScalePercent, std::string text) {
+
+	for (int i = 0; i < text.size(); i++) { //Iterate through the characters in 'text' param
+		for (auto& letter : alphabet) { // Look for matches in alphabet vector
 			if (text[i] == letter.name) {
 				std::vector<point> newPoints;
-				for (auto& p : letter.points) {
+				for (auto& p : letter.points) { // Convert all of the point2Ds in the letter to 3D points with z=0
 					point frontPoint = { p.x, p.y, 0 };
 					newPoints.push_back(frontPoint);
 				}
-				for (auto& p : letter.points) {
+				for (auto& p : letter.points) { // Also add those same points but with some depth added
 					point depthPoint = { p.x, p.y, letterDepth};
 					newPoints.push_back(depthPoint);
 				}
 				add_edges(letter.pieces);
-				for (auto& p : newPoints) {
-					p.x += 115 * i;
+				for (auto& p : newPoints) { // Shift each point according to its position in the message
+					p.x += (letterWidth + letterSpacing) * i;
 				}
 				add_points(newPoints);
 				continue;
@@ -60,30 +85,9 @@ void Frame::add_text(std::string text) {
 
 		}
 	}
+	update_center(width, height, renderScalePercent, text.size());
 }
 
-void Frame::update_center(int width, int height, int renderScalePercent) {
-	float renderScale = renderScalePercent * 0.01;
-	center = { 0, 0, 0 };
-	for (auto& p : points) {
-		center.x += p.x;
-		center.y += p.y;
-		center.z += p.z;
-	}
-	center.x /= points.size();
-	center.y /= points.size();
-	center.z /= points.size();
-	for (auto& p : points) {
-		p.x += ((width / 2) - center.x*renderScale) * (1/renderScale);
-		p.y += ((height / 2) - center.y*renderScale) * (1/renderScale);
-	}
-	center.x = width / (2*renderScale);
-	center.y = height / (2*renderScale);
-}
-
-std::vector<edge> Frame::get_edges() {
-	return edges;
-}
 
 // Rotate the frame's collection of points in 3 dimensions, parameters in radians
 std::vector<point> Frame::generate_rotated_frame(float rX, float rY, float rZ) {
@@ -91,6 +95,8 @@ std::vector<point> Frame::generate_rotated_frame(float rX, float rY, float rZ) {
 	std::vector<point> newFrame = points;
 
 	for (auto& p : newFrame) {
+
+		// It is mathematically easier to rotate around the origin, so we will shift everything to be centered there then shift back after
 		p.x -= center.x;
 		p.y -= center.y;
 		p.z -= center.z;

@@ -22,15 +22,16 @@ class Screen {
 
 	Screen(int width, int height, int renderScalePercent, rgb backgroundColor, rgb drawColor);
 
-	/*Adds a point to the screen's collection of points */
+	// Adds a point to the screen's collection of points
 	void pixel(float x, float y);
 
-	/*Colors the whole screen black, then draws all of the points in white*/
+	// Colors the whole screen backgroundColor, then draws points in drawColor
 	void show();
 
-	/*Wipes all of the points in the screen's collection of points*/
+	// Wipes all of the points in the screen's collection of points
 	void clear();
 
+	// Check for input, like clicking the X button to close the window
 	void input();
 
 
