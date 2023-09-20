@@ -14,20 +14,20 @@ The application will open a console menu where you can input some options: what 
 
 **You can skip the advanced options** and use default values by entering "Y" when prompted, and **this is recommended your first time using the application**.
 
-*You might get **weird/ugly** output if*:
-* You set a render size that is too extreme - values between 0.6 and 3.0 work best. The program does not necessarily make sure your text will fit the screen, and a render scale that is too small can cause the lines to disappear.
-* You choose a prompt that is too long to fit.
-* You choose a background color that is the same or very nearly the same as the draw color.
+*Getting **weird/ugly** output? Make sure you didn't*:
+* Set a render size that is too extreme - you will almost always want to use a value between 0.5 and 2 or so.
+* Choose a prompt that is too long to fit.
+* Choose a background color that is the same or very nearly the same as the draw color.
 
 ## Understanding the Math
 
 I want to share some resources I liked about rendering in case you are also curious about it and help give you a head start in digesting how this stuff works.
 
-The main mathematical problem we are dealing with is figuring out how to take a point in 3D space and find out where it is in 2D space (your screen) after rotating it around some other point.
+The main mathematical problem we are dealing with for this project is figuring out how to take a point in 3D space and find out where it is in 2D space (your screen) after rotating it around some other point.
 
 In my honest opinion, the best way to understand the math needed for stuff like this at a deep level is to go down the Wikipedia rabbit hole. [This Wikipedia page](https://en.wikipedia.org/wiki/Rotation_matrix) is a good one to dive in at (everything past the first few sections is irrelevant though). 
 
-Wikipedia isn't a friendly place to start for this topic if you aren't very comfortable with linear algebra or aren't used to reading the Wikipedia math pages, however. Please don't let it scare you away if it is too much. At it's core, the math required for this rendering project is built on the simple trigonometry that you probably learned in high school.
+Wikipedia isn't a friendly place to start for this topic if you aren't very comfortable with linear algebra or aren't used to reading the Wikipedia math pages, however. If you find the Wikipedia page overwhelming, there is good news: at it's core, the math required for this rendering project is built on the simple trigonometry that you probably learned in high school.
 
 Ultimately, all we really need to be able to do for this project is find the positions of the vertices of our shapes after they have been rotated around the origin. If we have the vertices, it is easy to draw lines between them. I'd like to walk you through a simple 2D example on my whiteboard to show how approachable it can be.
 
@@ -47,6 +47,8 @@ std::vector<point> Frame::generate_rotated_frame(float rX, float rY, float rZ) {
 	std::vector<point> newFrame = points;
 
 	for (auto& p : newFrame) {
+
+		// It is mathematically easier to rotate around the origin, so we will shift everything to be centered there then shift back after
 		p.x -= center.x;
 		p.y -= center.y;
 		p.z -= center.z;
@@ -74,34 +76,9 @@ std::vector<point> Frame::generate_rotated_frame(float rX, float rY, float rZ) {
 	return newFrame;
 ```
 
-After rotating the vertices, we draw lines between them with this code:
-
-```
-void add_pixels_in_line(Screen& screen, float x1, float y1, float x2, float y2) {
-	float dx = x2 - x1;
-	float dy = y2 - y1;
-
-	float length = std::sqrt(std::pow(dx, 2.0f) + std::pow(dy, 2.0f));
-	float angle = std::atan2(dy, dx);
-
-	for (int i = 0; i < length; i++) {
-		screen.pixel(
-						x1 + std::cos(angle) * i,
-						y1 + std::sin(angle) * i
-					);
-	} 
-
-}
-```
-
-We use the Pythagorean theorem to find the length of the line, then we add pixels to the screen along the path of the first point to the second point until we have hit that length.
-
-
-
-
 ## Understanding the Code
 
-The program uses SDL 2.0, which is used to open a window and actually output the points that I tell it to onto the screen. Setting up SDL can be a little tricky. [Here is a resource I found helpful](https://www.studyplan.dev/sdl-dev/sdl-setup-windows), though I don't necessarily condone setting up your environment exactly as it describes if you want to distribute your application. I also found [this Stack Overflow answer](https://stackoverflow.com/a/64396980) helpful for understanding some issues I ran into.
+The program uses SDL 2.0 in order to open a window and actually output the points that I tell it to onto the screen. Setting up SDL can be a little tricky. [Here is a resource I found helpful](https://www.studyplan.dev/sdl-dev/sdl-setup-windows), though I don't necessarily condone setting up your environment exactly as it describes if you want to distribute your application. I also found [this Stack Overflow answer](https://stackoverflow.com/a/64396980) helpful for understanding some issues I ran into.
 
 If you want to follow along with someone making the basics of a 3D renderer in SDL in video form, I didn't find any perfect options, but I like [this video](https://www.youtube.com/watch?v=kdRJgYO1BJM) which teaches you how to make a spinning cube. I would definitely start with a cube, and I *do* like this person's video and found it helpful to get me started. He is articulate and easy to follow. However, there are some things you should watch out for:
 
@@ -118,16 +95,11 @@ If you wanted to iterate on this project and make it your own, I have some ideas
 1. Add proper perspective (more distant lines are smaller)
 1. Add an option to change the camera's location
 1. Fill in the faces of the figures
-1. Use a point cloud to define the shapes
-1. Make an editor for defining the shapes
+1. Make an editor for defining the shapes/characters
 
 These steps would all bring the project closer to being a full-fledged renderer suitable for a game or something like that, but of course, if you just want to achieve that end and aren't interested in the challenge, you are certainly better off using something like OpenGL instead of trying to build off of this foundation.
 
-For my purposes, I am really happy with this where it is, except that I have noticed that sometimes the text is off center a little bit. I hope to find time to figure out why and fix it soon.
-
 If I were to do this all again, I would normalize the sizes. That would make scaling them easier without cheating by changing the SDL render scale (which doesn't quite work as well as I want anyway), and would make working with the program easier in general.
-
-
 
 ![nameGif](https://github.com/rhbourke/wireframe-renderer/assets/3631484/b8045582-192f-4f72-96a5-14a59e76d36f)
 
